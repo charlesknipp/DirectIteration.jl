@@ -1,0 +1,13 @@
+name = "DirectIteration"
+uuid = "fe597379-fc1e-424f-ac71-28bf0dc568bf"
+authors = ["Charles Knipp", "Babur Kocaoglu"]
+version = "1.0.0-DEV"
+
+[compat]
+julia = "1.6.7"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
