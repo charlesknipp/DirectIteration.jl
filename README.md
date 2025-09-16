@@ -4,13 +4,15 @@
 
 ## Marginal Likelihood Approach
 Traditional likelihood evaluation of state space models is done via marginalizing the log-likelihood with a particle filter (for nonlinear models). Using Bayes theorem we evaluate the following likelihood:
-$$
+
+```math
 \begin{align*}
 \log p \left( x^{T}, \theta | y^{T} \right) &\propto \log p \left( y^{T}, \theta \right) \\
 &\propto \log p \left( \theta \right) + \log p \left( y_{T} | \theta \right) \\
 &\propto \log p \left( \theta \right) + \sum \log p \left( y_{t} | y_{t-1}, \theta \right)
 \end{align*}
-$$
+```
+
 where filter yields an expression for $\log p \left( y_{t} | y_{t-1}, \theta \right)$ at every time step of the algorithm.
 
 In Julia, we can use `GeneralizedFilters` to return the log marginal likelihood for a user provided state space ala `SSMProblems`. Given the user provided model `state_space` we can compute the posterior likelihood as follows:
@@ -25,13 +27,15 @@ end
 
 ## Direct Iteration Approach
 The algorithm proposed in (Childers, 2022) uses a different approach to evaluating likelihoods like so:
-$$
+
+```math
 \begin{align*}
 	\log p \left( \theta, x^{T} | y^{T} \right) &\propto \log p \left( x^{T}, \theta \right) + \log p \left( y^{T} | x^{T}, \theta \right) \\
 	 &\propto \log p \left( \theta \right) + \log p \left( x^{T} | \theta \right) + \sum \log p \left( y_{t} | x_{t}, \theta \right) \\
 	 &\propto \log p \left( \theta \right) + \log p \left( x_{0} | \theta \right) + \sum \log p \left( x_{t} | x_{t-1}, \theta \right) + \sum \log p \left( y_{t} | x_{t}, \theta \right)
 \end{align*}
-$$
+```
+
 With this approach, computing the posterior is *filter free* in the sense that predictions are made in bulk. We specifically ignore the Markovian structure of the problem in favor of potential gains from differentiable sampling.
 
 Using `Turing.jl` we can very easily define this problem in a self contained model.
