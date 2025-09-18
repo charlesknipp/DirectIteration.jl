@@ -2,11 +2,14 @@ using DirectIteration
 using Test
 
 using SSMProblems
+using GeneralisedFilters
 using Random
 using Distributions
 using AbstractMCMC
 using MCMCChains
 using AdvancedHMC
+
+const GF = GeneralisedFilters
 
 import ForwardDiff
 
@@ -17,7 +20,7 @@ include("model.jl")
 # include("turing.jl")
 
 NX = 2
-T = 250
+T = 100
 
 rng = MersenneTwister(1234);
 true_λs = rand(rng, λ_prior(NX, NX));
@@ -26,6 +29,7 @@ x0, xs, ys = SSMProblems.sample(rng, true_ssm, T);
 
 @testset "direct iteration" begin
     # create the model
+    rng = MersenneTwister(1234)
     ssmprob = StateSpaceProblem(θ -> factor_model(0.2, θ, (NX, NX)), ys, (1, NX))
 
     # sample a random draw from the "prior"
@@ -36,7 +40,6 @@ x0, xs, ys = SSMProblems.sample(rng, true_ssm, T);
     end
 
     # run the sampler
-    rng = MersenneTwister(1234)
     chain = AbstractMCMC.sample(
         rng,
         LogDensityModel(ssmprob),
@@ -44,6 +47,7 @@ x0, xs, ys = SSMProblems.sample(rng, true_ssm, T);
         250 + 500;
         n_adapts = 250,
         initial_params,
-        chain_type = Chains
+        chain_type = Chains,
+        progress = false
     )
 end

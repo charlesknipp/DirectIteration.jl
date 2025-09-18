@@ -1,3 +1,6 @@
+using LinearAlgebra
+using MatrixEquations
+
 function factor_matrix(λs::AbstractVector{T}, ny::Int, nx::Int) where {T}
     Λ = diagm(ny, nx, ones(T, min(nx, ny)))
     iter = 1
