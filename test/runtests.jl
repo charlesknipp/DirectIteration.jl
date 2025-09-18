@@ -26,7 +26,7 @@ x0, xs, ys = SSMProblems.sample(rng, true_ssm, T);
 
 @testset "direct iteration" begin
     # create the model
-    ssmprob = StateSpaceProblem(ys, (1, NX), θ -> factor_model(0.2, θ, (NX, NX)))
+    ssmprob = StateSpaceProblem(θ -> factor_model(0.2, θ, (NX, NX)), ys, (1, NX))
 
     # sample a random draw from the "prior"
     initial_params = begin
